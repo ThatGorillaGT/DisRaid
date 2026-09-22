@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DisRaid — We Are The Storm</title>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 15% 15%, rgba(30, 100, 255, 0.28), transparent 35%),
+      radial-gradient(circle at 85% 80%, rgba(140, 40, 255, 0.30), transparent 40%),
+      linear-gradient(135deg, #03091f, #07194a 40%, #18083d 75%, #050217);
+    color: #e8eaf0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow.blue {
+    background: #246bff;
+    top: -200px;
+    left: -150px;
+  }
+
+  .glow.purple {
+    background: #9b3cff;
+    bottom: -250px;
+    right: -150px;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .tag {
+    font-family: monospace;
+    color: #7c9cff;
+    letter-spacing: 4px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff, #6d9cff 55%, #b84dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sub {
+    margin-top: 1rem;
+    color: #a5aed0;
+    font-size: 1.2rem;
+    max-width: 600px;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 2.5rem;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(135deg, #286cff, #7435d9);
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(70, 90, 255, 0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px rgba(100, 80, 255, 0.6);
+  }
+
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #6d7cff;
+    padding-left: 1rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .card {
+    background: rgba(10, 18, 50, 0.75);
+    border: 1px solid #27376f;
+    border-radius: 12px;
+    padding: 1.8rem;
+    transition: border-color 0.2s, transform 0.2s;
+    backdrop-filter: blur(10px);
+  }
+
+  .card:hover {
+    border-color: #7185ff;
+    transform: translateY(-4px);
+  }
+
+  .card .num {
+    font-family: monospace;
+    color: #7d91ff;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+  }
+
+  .card h3 {
+    margin: 0.7rem 0 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .card p {
+    color: #9aa0b4;
+    line-height: 1.6;
+  }
+
+  .rules {
+    list-style: none;
+    margin-top: 1rem;
+  }
+
+  .rules li {
+    padding: 1rem 1.2rem;
+    background: rgba(10, 18, 50, 0.75);
+    border: 1px solid #27376f;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    backdrop-filter: blur(10px);
+  }
+
+  .rules li b {
+    color: #7d91ff;
+  }
+
+  .download-box {
+    text-align: center;
+    background: rgba(10, 18, 50, 0.75);
+    border: 1px solid #34498d;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    box-shadow: 0 0 50px rgba(70, 70, 255, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  .download-box h2 {
+    border: none;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .download-box p {
+    color: #9aa0b4;
+    margin-bottom: 1rem;
+  }
+
+  .download-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 1rem 2.5rem;
+    color: white;
+    text-decoration: none;
+    background: linear-gradient(135deg, #286cff, #8a3ffc);
+    border-radius: 8px;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(80, 80, 255, 0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .download-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(120, 80, 255, 0.6);
+  }
+
+  .discord-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 1rem 2.5rem;
+    color: white;
+    text-decoration: none;
+    background: linear-gradient(135deg, #5865F2, #7289DA);
+    border-radius: 8px;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(88, 101, 242, 0.45);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .discord-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(88, 101, 242, 0.7);
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #626b8d;
+    font-size: 0.9rem;
+    border-top: 1px solid #1b2750;
+  }
+
+  footer span {
+    color: #8b5cff;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="glow blue"></div>
+<div class="glow purple"></div>
+
+<header>
+  <div class="tag">// BEST RAIDER ON DISBAND</div>
+
+  <h1>DisRaid</h1>
+
+  <p class="sub">
+    Disraid was designed for raiding servers that spread false information and are a bad influence for the community of Disband, not for raiding innocent servers.
+  </p>
+
+  <a class="btn" href="#download">
+    Join The Raid
+  </a>
+</header>
+
+<section>
+  <h2>What We Are</h2>
+
+  <p style="color:#9aa0b4; line-height:1.8; font-size:1.1rem;">
+    DisRaid is a raiding tool on Disband and maybe soon other platforms that raids servers and spams messages to servers that aren't good for Disband and are spreading hurtful things like malware or viruses.
+  </p>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="num">01</div>
+      <h3>Fast Spamming</h3>
+      <p>
+        Once the program is ready, it will spam whatever message you want extremely fast.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="num">02</div>
+      <h3>Multi-Account</h3>
+      <p>
+        Up to five accounts per operator, more accounts, more spam.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="num">03</div>
+      <h3>Self-Healing</h3>
+      <p>
+        Stops spamming? It will revive itself by waiting for the cooldown to refresh, then its back at it.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Crew Rules</h2>
+
+  <ul class="rules">
+    <li>
+      <b>01 —</b>
+      Raid targets, never innocents. What happens in the raided channel stays in the raided channel.
+    </li>
+
+    <li>
+      <b>02 —</b>
+      Bring your own accounts. Nobody shares logins, nobody asks for yours.
+    </li>
+
+    <li>
+      <b>03 —</b>
+      When the damage has been done, you don't stop. Keep spamming till the job is finished.
+    </li>
+
+    <li>
+      <b>04 —</b>
+      Screenshots or it didn't happen. No proof, no ban.
+    </li>
+  </ul>
+</section>
+
+<section id="download">
+
+  <div class="download-box">
+
+    <h2>Download DisRaid</h2>
+
+    <p>
+      Get the latest version of DisRaid and join the crew.
+    </p>
+
+    <p style="font-size:0.9rem;">
+      Version 1.0.0
+    </p>
+
+    <!-- Download Button -->
+    <a
+      class="download-btn"
+      href="https://github.com/Tabel4/Disraid/releases/download/raider/Disraid.zip"
+    >
+      Download DisRaid
+    </a>
+
+    <!-- Discord Button -->
+    <a
+      class="discord-btn"
+      href="https://discord.gg/DvyEUDJXR9"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Join Discord
+    </a>
+
+  </div>
+
+</section>
+
+<footer>
+  DisRaid <span>///</span> built for the ones who stay up late
+</footer>
+
+</body>
+</html>
